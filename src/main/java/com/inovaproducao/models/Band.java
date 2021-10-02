@@ -33,11 +33,12 @@ public class Band {
 	private String bannerPath;
 
 	@Column(nullable = false)
-	private Integer status = 1;
+	private Integer status;
 
 	@Column(nullable = false)
-	private LocalDateTime dateCreated = LocalDateTime.now();
+	private LocalDateTime dateCreated;
 
 	@Column(nullable = true)
 	private LocalDateTime dateUpdated;
+
 }

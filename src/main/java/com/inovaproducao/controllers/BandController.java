@@ -30,8 +30,8 @@ public class BandController {
 	private BandService service;
 
 	@GetMapping()
-	public ResponseEntity<List<Band>> findAll() throws RestError {
-		return ResponseEntity.ok(this.service.findAll());
+	public ResponseEntity<List<Band>> findAllOnlyActive() throws RestError {
+		return ResponseEntity.ok(this.service.findAllOnlyActive());
 	}
 
 	@GetMapping("/{id}")

@@ -8,12 +8,19 @@ import java.nio.file.Paths;
 
 import javax.annotation.PostConstruct;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
 public class StorageService {
 
 	private final Path root = Paths.get("uploads");
+	
+	@Value("${uploads.playlist_folder}")
+	private String playlistImagesFolder;
+	
+	@Value("${uploads.bands_folder}")
+	private String bandsImagesFolder;
 
 	@PostConstruct
 	public void initialize() {
@@ -22,8 +29,11 @@ public class StorageService {
 			if(!this.root.toFile().exists()) {
 				Files.createDirectory(this.root);
 			}
-			if(!this.root.resolve("bands").toFile().exists()) {
-				Files.createDirectory(this.root.resolve("bands"));
+			if(!this.root.resolve(this.bandsImagesFolder).toFile().exists()) {
+				Files.createDirectory(this.root.resolve(this.bandsImagesFolder));
+			}
+			if(!this.root.resolve(this.playlistImagesFolder).toFile().exists()) {
+				Files.createDirectory(this.root.resolve(this.playlistImagesFolder));
 			}
 		} catch (Exception e) {
 

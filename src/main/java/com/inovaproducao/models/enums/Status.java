@@ -2,8 +2,7 @@ package com.inovaproducao.models.enums;
 
 public enum Status {
 	ACTIVE(1),
-	INACTIVE(2),
-	DELETED(3);
+	INACTIVE(2);
 	
 	private Integer id;
 	

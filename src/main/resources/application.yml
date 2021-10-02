@@ -10,7 +10,7 @@ spring:
     username: postgres
     url: jdbc:postgresql://localhost:5432/inovaproducoes
     platform: postgres
-    password: ''
+    password: '061118'
   jpa:
     database: POSTGRESQL
     properties:
@@ -25,5 +25,6 @@ spring:
     
     
 uploads:
-  bands_path: bands
+  bands_folder: bandsImages
+  playlist_folder: playlistImages
  
