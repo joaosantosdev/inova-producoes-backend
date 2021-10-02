@@ -1,0 +1,29 @@
+server:
+  port: 4000
+  
+spring:
+  application:
+    name: InovaProducao
+    
+  datasource:
+    initialization-mode: always
+    username: postgres
+    url: jdbc:postgresql://localhost:5432/inovaproducoes
+    platform: postgres
+    password: ''
+  jpa:
+    database: POSTGRESQL
+    properties:
+      hibernate:
+        jdbc:
+          lob:
+            non_contextual_creation: 'true'
+        format_sql: 'true'
+    hibernate:
+      ddl-auto: create
+    show-sql: 'true'
+    
+    
+uploads:
+  bands_path: bands
+ 
