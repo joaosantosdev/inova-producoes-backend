@@ -53,9 +53,16 @@ public class PlaylistController {
 	}
 
 	@PostMapping("/{id}/image")
-	public ResponseEntity<Void> save(@PathVariable Long id, @RequestParam MultipartFile imgFile)
+	public ResponseEntity<Void> uploadImage(@PathVariable Long id, @RequestParam MultipartFile imgFile)
 			throws RestError, IOException {
 		this.service.saveImage(id, imgFile);
+		return ResponseEntity.noContent().build();
+	}
+	
+	@PostMapping("/{id}/upload-musics")
+	public ResponseEntity<Void> uploadMusics(@PathVariable Long id, @RequestParam MultipartFile [] musicsFile)
+			throws RestError, IOException {
+		this.service.uploadMusics(id, musicsFile);
 		return ResponseEntity.noContent().build();
 	}
 

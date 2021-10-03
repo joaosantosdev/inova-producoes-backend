@@ -11,6 +11,7 @@ import com.inovaproducao.models.Band;
 public interface BandRepository extends JpaRepository<Band, Long> {
 	
 	public Band findByPath(String path);
+	
 	public List<Band> findByStatus(Integer status);
 
 }

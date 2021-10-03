@@ -39,7 +39,7 @@ public class BandService {
 				.orElseThrow(() -> RestError.notFound("Banda não encontrada"));
 	}
 	
-	public void save(BandFormDTO bandForm) throws RestError {
+	public Band save(BandFormDTO bandForm) throws RestError {
 		Band band = bandForm.toEntity();
 
 		if (Utils.isStatusInvalid(bandForm.getStatus())) {
@@ -52,6 +52,8 @@ public class BandService {
 		
 		band.setDateCreated(LocalDateTime.now());
 		this.repository.save(band);
+		
+		return band;
 	}
 	
 	public void update(Long id, BandFormDTO bandForm) throws RestError {

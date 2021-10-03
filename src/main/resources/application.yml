@@ -20,10 +20,13 @@ spring:
             non_contextual_creation: 'true'
         format_sql: 'true'
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     show-sql: 'true'
     
-    
+  servlet:
+    multipart:
+      max-file-size: 1000MB
+      max-request-size: 1000MB
 uploads:
   bands_folder: bandsImages
   playlist_folder: playlistImages

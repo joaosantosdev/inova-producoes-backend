@@ -1,9 +1,13 @@
 package com.inovaproducao.services;
 
+import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -12,7 +16,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.inovaproducao.exceptions.RestError;
 import com.inovaproducao.models.Band;
+import com.inovaproducao.models.Music;
 import com.inovaproducao.models.Playlist;
+import com.inovaproducao.models.dto.MusicFormDTO;
 import com.inovaproducao.models.dto.PlaylistFormDTO;
 import com.inovaproducao.models.enums.Status;
 import com.inovaproducao.repositories.PlaylistRepository;
@@ -30,6 +36,9 @@ public class PlaylistService {
 
 	@Autowired
 	private StorageService storageService;
+
+	@Autowired
+	private MusicService musicService;
 
 	@Value("${uploads.playlist_folder}")
 	private String playlistImagesFolder;
@@ -55,6 +64,11 @@ public class PlaylistService {
 		}
 
 		Playlist playlist = this.findById(id);
+		this.musicService.deleteByPlaylistId(id);
+
+		List<Music> musics = playlistFormDTO.getMusics().stream().map(MusicFormDTO::toEntity)
+				.collect(Collectors.toList());
+
 
 		if (!playlist.getBand().getId().equals(playlistFormDTO.getBandId())) {
 			Band band = this.bandService.findById(playlistFormDTO.getBandId());
@@ -66,6 +80,9 @@ public class PlaylistService {
 		playlist.setDateUpdated(LocalDateTime.now());
 		playlist.setStatus(playlistFormDTO.getStatus());
 		this.repository.save(playlist);
+
+		this.musicService.saveAll(playlist, musics);
+
 	}
 
 	public void save(PlaylistFormDTO playlistFormDTO) throws RestError {
@@ -78,11 +95,18 @@ public class PlaylistService {
 			throw RestError.badRequest("Path da banda já cadastrado");
 		}
 
+		List<Music> musics = playlistFormDTO.getMusics().stream().map(MusicFormDTO::toEntity)
+				.collect(Collectors.toList());
+
+
 		Band band = this.bandService.findById(playlistFormDTO.getBandId());
 		Playlist playlist = playlistFormDTO.toEntity();
 		playlist.setBand(band);
 		playlist.setDateCreated(LocalDateTime.now());
+		playlist.setMusics(musics);
 		this.repository.save(playlist);
+		this.musicService.saveAll(playlist, musics);
+
 	}
 
 	public void saveImage(Long playlistId, MultipartFile imgFile) throws IOException, RestError {
@@ -98,6 +122,25 @@ public class PlaylistService {
 		playlist.setImgPath(imgPath);
 
 		this.repository.save(playlist);
+	}
+	
+	public void uploadMusics(Long playlistId, MultipartFile[] musicsFile) throws RestError, IOException, IllegalStateException {
+		Playlist playlist = this.findById(playlistId);
+		if(playlist.getMusics().size() != musicsFile.length) {
+			throw RestError.badRequest("File não corresponde ao tamanho da playlist");
+		}
+		
+		Path path = Path.of("uploads").resolve(this.playlistImagesFolder).resolve(playlistId.toString());
+		this.storageService.deleteDirectory(path);
+		this.storageService.createDirectory(path);
+		
+		for(int i = 0; i < musicsFile.length; i++) {
+			MultipartFile musicFile = musicsFile[i];
+			Music music = playlist.getMusics().get(i);
+			Path pathMusic = path.resolve(music.getPath()+".mp3");
+			InputStream inputStream = new ByteArrayInputStream(musicFile.getBytes());
+			this.storageService.saveFile(inputStream, pathMusic);
+		}
 	}
 
 }

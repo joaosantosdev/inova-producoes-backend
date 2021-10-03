@@ -1,5 +1,7 @@
 package com.inovaproducao.services;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -55,6 +57,19 @@ public class StorageService {
 		
 		Files.copy(is, fileDir);
 		return fileName;
+	}
+	
+	public void deleteDirectory(Path path) throws IOException {
+		if(path.toFile().exists()) {
+			Files.delete(path);
+		}
+	}
+	public void createDirectory(Path path) throws IOException {
+		Files.createDirectory(path);
+	}
+	
+	public void saveFile(InputStream is, Path path) throws IOException {
+		Files.copy(is, path);
 	}
 
 }

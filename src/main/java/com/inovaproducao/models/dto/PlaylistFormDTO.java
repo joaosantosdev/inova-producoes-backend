@@ -1,5 +1,7 @@
 package com.inovaproducao.models.dto;
 
+import java.util.List;
+
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
@@ -13,27 +15,30 @@ import lombok.Setter;
 @Getter
 @Setter
 public class PlaylistFormDTO {
-	
-	@NotEmpty(message="Campo obrigatório.")
-	@Length(min=1, max=100, message="Campo deve ter no mínimo 5 caracteres e no máximo 100.")
+
+	@NotEmpty(message = "Campo obrigatório.")
+	@Length(min = 1, max = 100, message = "Campo deve ter no mínimo 5 caracteres e no máximo 100.")
 	private String name;
-	
-	@NotEmpty(message="Campo obrigatório.")
-	@Length(min=1, max=100, message="Campo deve ter no mínimo 5 caracteres e no máximo 100.")
+
+	@NotEmpty(message = "Campo obrigatório.")
+	@Length(min = 1, max = 100, message = "Campo deve ter no mínimo 5 caracteres e no máximo 100.")
 	private String path;
-	
-    @NotNull(message = "Campo obrigatório.")
+
+	@NotNull(message = "Campo obrigatório.")
 	private Long bandId;
-    
-    @NotNull(message = "Campo obrigatório.")
+
+	@NotNull(message = "Campo obrigatório.")
 	private Integer status;
-    
-    public Playlist toEntity() {
-    	Playlist playlist = new Playlist();
-    	playlist.setPath(this.path);
-    	playlist.setName(this.name);
-    	playlist.setStatus(this.status);
-    	return playlist;
-    }
 	
+	@NotEmpty(message = "Campo obrigatório.")
+	private List<MusicFormDTO> musics;
+
+	public Playlist toEntity() {
+		Playlist playlist = new Playlist();
+		playlist.setPath(this.path);
+		playlist.setName(this.name);
+		playlist.setStatus(this.status);
+		return playlist;
+	}
+
 }

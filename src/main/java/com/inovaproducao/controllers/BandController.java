@@ -39,10 +39,9 @@ public class BandController {
 		return ResponseEntity.ok(this.service.findById(id));
 	}
 
-	@PostMapping()
-	public ResponseEntity<Void> save(@Valid @RequestBody BandFormDTO bandForm) throws RestError {
-		this.service.save(bandForm);
-		return ResponseEntity.noContent().build();
+	@PostMapping
+	public ResponseEntity<Band> save(@Valid @RequestBody BandFormDTO bandForm) throws RestError {
+		return ResponseEntity.ok(this.service.save(bandForm));
 	}
 
 	@PostMapping("/{id}/images")
